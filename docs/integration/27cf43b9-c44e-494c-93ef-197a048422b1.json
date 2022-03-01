@@ -1,0 +1,203 @@
+{
+    "id": "27cf43b9-c44e-494c-93ef-197a048422b1",
+    "name": "Demo status provider",
+    "data": {
+        "id": "27cf43b9-c44e-494c-93ef-197a048422b1",
+        "name": "Demo status provider",
+        "channels": [
+            {
+                "id": "aaeb5a0c-6aff-44aa-a537-733a98fee287",
+                "name": "http_status",
+                "agent": null,
+                "nodes": [
+                    {
+                        "id": "f30e61a7-76cb-4e79-8af0-46481893623e",
+                        "data": {
+                            "path": "/status",
+                            "port": 8888,
+                            "label": "HTTP Input",
+                            "hostname": "0.0.0.0",
+                            "protocol": "jetty:http",
+                            "out_format": "raw",
+                            "query_params": {
+                                "async": false,
+                                "enableCORS": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "d53008f6-94bc-431e-9de1-d37890de3830"
+                            }
+                        ],
+                        "type_id": "http_input",
+                        "position": {
+                            "x": 171,
+                            "y": 106.8515625
+                        }
+                    },
+                    {
+                        "id": "d53008f6-94bc-431e-9de1-d37890de3830",
+                        "data": {
+                            "code": "import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nexchangeSetBody(context?.exchange, [ params: [\"body\": \"{\\\"message\\\": \\\"Running properly\\\"}\"], context: context]);\n\n// End",
+                            "label": "Visual Groovy Code",
+                            "script": {
+                                "language": "groovy",
+                                "contextCode": "angie.core.camel_context_groovy",
+                                "contextMember": {
+                                    "code": "context",
+                                    "name": "context",
+                                    "type": {
+                                        "type": "object",
+                                        "objectCode": "angie.core.camel_context"
+                                    },
+                                    "memberType": "context"
+                                },
+                                "mainStatement": {
+                                    "id": "main-block",
+                                    "main": true,
+                                    "type": "block",
+                                    "variables": {},
+                                    "nestedStatements": [
+                                        {
+                                            "id": "start",
+                                            "name": "Inicio",
+                                            "type": "start"
+                                        },
+                                        {
+                                            "id": "a9a4f522-dff5-4679-aaa2-b69c53129a4e",
+                                            "name": "Nuevo grupo de expresiones",
+                                            "type": "expressionGroup",
+                                            "expressions": [
+                                                [
+                                                    {
+                                                        "code": "context",
+                                                        "name": "context",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_context"
+                                                        },
+                                                        "memberType": "context"
+                                                    },
+                                                    {
+                                                        "code": "exchange",
+                                                        "name": "Exchange",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "memberType": "property",
+                                                        "complexityLevel": 1
+                                                    },
+                                                    {
+                                                        "id": 22457,
+                                                        "code": "exchangeSetBody",
+                                                        "name": "Set body",
+                                                        "type": {
+                                                            "type": "void"
+                                                        },
+                                                        "name_": "Test CLONED",
+                                                        "params": {
+                                                            "body": "{\"message\": \"Running properly\"}"
+                                                        },
+                                                        "isActive": true,
+                                                        "language": "groovy",
+                                                        "memberType": "method",
+                                                        "parentType": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "sourceCode": "self.getIn().setBody(params.body);",
+                                                        "description": "",
+                                                        "package_code": "angie.core",
+                                                        "paramMembers": [
+                                                            {
+                                                                "code": "body",
+                                                                "name": "Cuerpo",
+                                                                "type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "renderTemplate": "Modificar cuerpo {{body}}",
+                                                        "complexityLevel": 1,
+                                                        "package_version": "1.0.0",
+                                                        "sourceCodeForBinaryOperator": ""
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "id": "end",
+                                            "name": "Fin",
+                                            "type": "end"
+                                        }
+                                    ]
+                                }
+                            },
+                            "beforeSave": "generateCode"
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "0cec652c-6b90-40b6-a535-3f6190d6a47b"
+                            }
+                        ],
+                        "type_id": "groovy_visual",
+                        "position": {
+                            "x": 398,
+                            "y": 99.8515625
+                        }
+                    },
+                    {
+                        "id": "0cec652c-6b90-40b6-a535-3f6190d6a47b",
+                        "data": {
+                            "code": "",
+                            "label": "Fin Flujo"
+                        },
+                        "links": [],
+                        "type_id": "end",
+                        "position": {
+                            "x": 617,
+                            "y": 100.8515625
+                        }
+                    }
+                ],
+                "status": "UNDEPLOYED",
+                "enabled": true,
+                "version": 11,
+                "created_on": "2022-03-01T09:27:19.663Z",
+                "last_updated": "2022-03-01T09:28:15.016Z",
+                "messages_sent": 0,
+                "messages_error": 0,
+                "messages_total": 0,
+                "deployment_options": {
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto"
+                },
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"f30e61a7-76cb-4e79-8af0-46481893623e\" group=\"\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/status?async%3Dfalse%26enableCORS%3Dfalse\"/>\n    \n            <to uri=\"direct:d53008f6-94bc-431e-9de1-d37890de3830\" />\n</route><route id=\"d53008f6-94bc-431e-9de1-d37890de3830\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:d53008f6-94bc-431e-9de1-d37890de3830\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nexchangeSetBody(context?.exchange, [ params: [\"body\": \"{\\\"message\\\": \\\"Running properly\\\"}\"], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:0cec652c-6b90-40b6-a535-3f6190d6a47b\" />\n</route><route id=\"0cec652c-6b90-40b6-a535-3f6190d6a47b\" group=\"\"><description>Fin Flujo</description>\n    <from uri=\"direct:0cec652c-6b90-40b6-a535-3f6190d6a47b\"/>\n    \n    \n    <to uri=\"mock:end0cec652c-6b90-40b6-a535-3f6190d6a47b\"/>\n</route></routes>"
+            }
+        ],
+        "created_on": "2022-03-01T09:26:51.012Z",
+        "description": "Demo for providing status",
+        "last_updated": "2022-03-01T09:28:19.756Z",
+        "package_code": "angie.demo",
+        "package_version": "1.0.0",
+        "deployment_config": {
+            "id": "27cf43b9-c44e-494c-93ef-197a048422b1",
+            "enabled": true,
+            "channel_config": {
+                "aaeb5a0c-6aff-44aa-a537-733a98fee287": {
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto"
+                }
+            },
+            "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
+            "deployment_config": null,
+            "last_deployment_date": "2022-03-01T09:28:19.758Z"
+        }
+    },
+    "package_code": "angie.demo",
+    "package_version": "1.0.0"
+}

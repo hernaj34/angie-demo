@@ -1,0 +1,41 @@
+{
+    "id": 69,
+    "package_code": "angie.demo",
+    "package_version": "1.0.0",
+    "document_type": "method",
+    "code": "hl7TerserGet",
+    "data": {
+        "id": 69,
+        "code": "hl7TerserGet",
+        "name": "Terser get",
+        "type": {
+            "type": "string"
+        },
+        "imports": [
+            "ca.uhn.hl7v2.util.Terser"
+        ],
+        "isActive": true,
+        "language": "groovy",
+        "parentType": {
+            "type": "object",
+            "objectCode": "angie.core.hl7_message"
+        },
+        "sourceCode": "Terser terser = new Terser(self);\nparams.path = resolveTemplate(params.path, context);\nterser.get(params.path);",
+        "description": "",
+        "package_code": "angie.demo",
+        "paramMembers": [
+            {
+                "code": "path",
+                "name": "Path",
+                "type": {
+                    "type": "string"
+                },
+                "required": false
+            }
+        ],
+        "renderTemplate": "Terser get {{path}}",
+        "complexityLevel": 1,
+        "package_version": "1.0.0",
+        "sourceCodeForBinaryOperator": ""
+    }
+}

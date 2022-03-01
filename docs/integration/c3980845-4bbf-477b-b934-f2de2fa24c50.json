@@ -1,0 +1,564 @@
+{
+    "id": "c3980845-4bbf-477b-b934-f2de2fa24c50",
+    "name": "Demo integration",
+    "data": {
+        "id": "c3980845-4bbf-477b-b934-f2de2fa24c50",
+        "name": "Demo integration",
+        "channels": [
+            {
+                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
+                "name": "his_to_lis",
+                "nodes": [
+                    {
+                        "id": "8bafebc5-296c-49df-ac4c-7470bb1d88a0",
+                        "data": {
+                            "port": 9001,
+                            "tags": [
+                                "his_demo"
+                            ],
+                            "label": "TCP/MLLP Input",
+                            "hostname": "0.0.0.0",
+                            "protocol": "mllp",
+                            "out_format": "hl7",
+                            "mllp_query_params": {
+                                "autoAck": true,
+                                "backlog": 5,
+                                "keepAlive": true,
+                                "acceptTimeout": 60000,
+                                "stringPayload": true,
+                                "validatePayload": false,
+                                "requireEndOfData": true
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "588a6459-e0c7-4115-b8c1-9a92fa0a8fdc"
+                            }
+                        ],
+                        "type_id": "tcp_input",
+                        "position": {
+                            "x": 90,
+                            "y": 194.359375
+                        }
+                    },
+                    {
+                        "id": "313bc5b5-2867-4598-b3ed-683d6150293d",
+                        "data": {
+                            "type": "file",
+                            "label": "File Output",
+                            "directory": "/Users/hernaj34/projects/_events/demo_dh_tools/exchanges",
+                            "query_params": {
+                                "fileExist": "Override",
+                                "bufferSize": 131072,
+                                "allowNullBody": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "a910e07a-ea8e-41f7-baf5-5b871233f65f"
+                            }
+                        ],
+                        "type_id": "file_output",
+                        "position": {
+                            "x": 965,
+                            "y": 205.359375
+                        }
+                    },
+                    {
+                        "id": "a910e07a-ea8e-41f7-baf5-5b871233f65f",
+                        "data": {
+                            "code": "",
+                            "tags": [
+                                "lis_demo"
+                            ],
+                            "label": "Fin Flujo"
+                        },
+                        "links": [],
+                        "type_id": "end",
+                        "position": {
+                            "x": 1175,
+                            "y": 206.359375
+                        }
+                    },
+                    {
+                        "id": "18c87a37-7481-49ed-920b-d2020e3f8837",
+                        "data": {
+                            "code": "import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7Encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7Encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End",
+                            "label": "Visual Groovy Code",
+                            "script": {
+                                "language": "groovy",
+                                "contextCode": "angie.core.camel_context_groovy",
+                                "contextMember": {
+                                    "code": "context",
+                                    "name": "context",
+                                    "type": {
+                                        "type": "object",
+                                        "objectCode": "angie.core.camel_context"
+                                    },
+                                    "memberType": "context"
+                                },
+                                "mainStatement": {
+                                    "id": "main-block",
+                                    "main": true,
+                                    "type": "block",
+                                    "variables": {
+                                        "hl7": {
+                                            "code": "hl7",
+                                            "name": "Hl7",
+                                            "type": {
+                                                "type": "object",
+                                                "objectCode": "angie.core.hl7_message"
+                                            },
+                                            "memberType": "variable"
+                                        }
+                                    },
+                                    "nestedStatements": [
+                                        {
+                                            "id": "start",
+                                            "name": "Inicio",
+                                            "type": "start",
+                                            "variables": [
+                                                {
+                                                    "code": "hl7",
+                                                    "name": "Hl7",
+                                                    "type": {
+                                                        "type": "object",
+                                                        "objectCode": "angie.core.hl7_message"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "6b045951-1753-4c0c-b19d-9c92bd35a20b",
+                                            "name": "Nuevo grupo de expresiones",
+                                            "type": "expressionGroup",
+                                            "expressions": [
+                                                [
+                                                    {
+                                                        "code": "context",
+                                                        "name": "context",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_context"
+                                                        },
+                                                        "memberType": "context"
+                                                    },
+                                                    {
+                                                        "code": "variables",
+                                                        "name": "Variables",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "variables"
+                                                        },
+                                                        "memberType": "variableContainer"
+                                                    },
+                                                    {
+                                                        "code": "hl7",
+                                                        "name": "Hl7",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.hl7_message"
+                                                        },
+                                                        "memberType": "variable"
+                                                    },
+                                                    {
+                                                        "id": 146,
+                                                        "code": "any_setter",
+                                                        "name": "Asignar valor",
+                                                        "type": {
+                                                            "type": "void"
+                                                        },
+                                                        "color": "green",
+                                                        "params": {
+                                                            "value": {
+                                                                "$exp": [
+                                                                    {
+                                                                        "code": "context",
+                                                                        "name": "context",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.camel_context"
+                                                                        },
+                                                                        "memberType": "context"
+                                                                    },
+                                                                    {
+                                                                        "code": "request",
+                                                                        "name": "Request",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.camel_request"
+                                                                        },
+                                                                        "memberType": "property",
+                                                                        "complexityLevel": 1
+                                                                    },
+                                                                    {
+                                                                        "id": 23769,
+                                                                        "code": "requestGetBody",
+                                                                        "name": "As HL7",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.hl7_message"
+                                                                        },
+                                                                        "imports": [
+                                                                            "ca.uhn.hl7v2.model.Message"
+                                                                        ],
+                                                                        "isActive": true,
+                                                                        "language": "groovy",
+                                                                        "memberType": "method",
+                                                                        "parentType": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.camel_request"
+                                                                        },
+                                                                        "sourceCode": "return self.getBody(ca.uhn.hl7v2.model.Message.class);",
+                                                                        "description": "",
+                                                                        "package_code": "angie.core",
+                                                                        "paramMembers": [],
+                                                                        "renderTemplate": "As HL7",
+                                                                        "complexityLevel": 1,
+                                                                        "package_version": "1.0.0",
+                                                                        "sourceCodeForBinaryOperator": ""
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        "isActive": true,
+                                                        "language": "groovy",
+                                                        "memberType": "method",
+                                                        "parentType": {
+                                                            "type": "$any"
+                                                        },
+                                                        "sourceCode": "nestedSet(context.variables, variablePath, params.value);",
+                                                        "description": "",
+                                                        "package_code": "angie.core",
+                                                        "paramMembers": [
+                                                            {
+                                                                "code": "value",
+                                                                "name": "Valor",
+                                                                "type": {
+                                                                    "type": "object",
+                                                                    "objectCode": "angie.core.hl7_message"
+                                                                },
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "renderTemplate": "Asignar valor {{value}}",
+                                                        "complexityLevel": 1,
+                                                        "package_version": "1.0.0",
+                                                        "sourceCodeForBinaryOperator": ""
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "code": "context",
+                                                        "name": "context",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_context"
+                                                        },
+                                                        "memberType": "context"
+                                                    },
+                                                    {
+                                                        "code": "variables",
+                                                        "name": "Variables",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "variables"
+                                                        },
+                                                        "memberType": "variableContainer"
+                                                    },
+                                                    {
+                                                        "code": "hl7",
+                                                        "name": "Hl7",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.hl7_message"
+                                                        },
+                                                        "memberType": "variable"
+                                                    },
+                                                    {
+                                                        "id": 70,
+                                                        "code": "hl7TerserSet",
+                                                        "name": "Terser set",
+                                                        "type": {
+                                                            "type": "string"
+                                                        },
+                                                        "name_": "Terser get CLONED",
+                                                        "params": {
+                                                            "path": "/.MSH-3-1",
+                                                            "value": "ORIGIN_MODIFIED"
+                                                        },
+                                                        "imports": [
+                                                            "ca.uhn.hl7v2.util.Terser"
+                                                        ],
+                                                        "isActive": true,
+                                                        "language": "groovy",
+                                                        "memberType": "method",
+                                                        "parentType": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.hl7_message"
+                                                        },
+                                                        "sourceCode": "Terser terser = new Terser(self);\nparams.path = resolveTemplate(params.path, context);\nparams.value = resolveTemplate(params.value, context);\nterser.set(params.path,params.value);",
+                                                        "description": "",
+                                                        "package_code": "angie.demo",
+                                                        "paramMembers": [
+                                                            {
+                                                                "code": "path",
+                                                                "name": "Path",
+                                                                "type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "required": false
+                                                            },
+                                                            {
+                                                                "code": "value",
+                                                                "name": "Value",
+                                                                "type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "renderTemplate": "Terser set {{path}} with {{value}}",
+                                                        "complexityLevel": 1,
+                                                        "package_version": "1.0.0",
+                                                        "sourceCodeForBinaryOperator": ""
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "code": "context",
+                                                        "name": "context",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_context"
+                                                        },
+                                                        "memberType": "context"
+                                                    },
+                                                    {
+                                                        "code": "exchange",
+                                                        "name": "Exchange",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "memberType": "property",
+                                                        "complexityLevel": 1
+                                                    },
+                                                    {
+                                                        "id": 22457,
+                                                        "code": "exchangeSetBody",
+                                                        "name": "Set body",
+                                                        "type": {
+                                                            "type": "void"
+                                                        },
+                                                        "name_": "Test CLONED",
+                                                        "params": {
+                                                            "body": {
+                                                                "$exp": [
+                                                                    {
+                                                                        "code": "context",
+                                                                        "name": "context",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.camel_context"
+                                                                        },
+                                                                        "memberType": "context"
+                                                                    },
+                                                                    {
+                                                                        "code": "variables",
+                                                                        "name": "Variables",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "variables"
+                                                                        },
+                                                                        "memberType": "variableContainer"
+                                                                    },
+                                                                    {
+                                                                        "code": "hl7",
+                                                                        "name": "Hl7",
+                                                                        "type": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.hl7_message"
+                                                                        },
+                                                                        "memberType": "variable"
+                                                                    },
+                                                                    {
+                                                                        "code": "hl7Encode",
+                                                                        "name": "Encode",
+                                                                        "type": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "isActive": true,
+                                                                        "language": "groovy",
+                                                                        "memberType": "method",
+                                                                        "parentType": {
+                                                                            "type": "object",
+                                                                            "objectCode": "angie.core.hl7_message"
+                                                                        },
+                                                                        "sourceCode": "return self.encode();",
+                                                                        "description": "",
+                                                                        "package_code": "angie.core",
+                                                                        "paramMembers": [],
+                                                                        "renderTemplate": "Encode",
+                                                                        "complexityLevel": 1,
+                                                                        "package_version": "1.0.0",
+                                                                        "sourceCodeForBinaryOperator": ""
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        "isActive": true,
+                                                        "language": "groovy",
+                                                        "memberType": "method",
+                                                        "parentType": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "sourceCode": "self.getIn().setBody(params.body);",
+                                                        "description": "",
+                                                        "package_code": "angie.core",
+                                                        "paramMembers": [
+                                                            {
+                                                                "code": "body",
+                                                                "name": "Cuerpo",
+                                                                "type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "renderTemplate": "Modificar cuerpo {{body}}",
+                                                        "complexityLevel": 1,
+                                                        "package_version": "1.0.0",
+                                                        "sourceCodeForBinaryOperator": ""
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "id": "end",
+                                            "name": "Fin",
+                                            "type": "end"
+                                        }
+                                    ]
+                                }
+                            },
+                            "beforeSave": "generateCode"
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "313bc5b5-2867-4598-b3ed-683d6150293d"
+                            }
+                        ],
+                        "type_id": "groovy_visual",
+                        "position": {
+                            "x": 767,
+                            "y": 204.359375
+                        }
+                    },
+                    {
+                        "id": "588a6459-e0c7-4115-b8c1-9a92fa0a8fdc",
+                        "data": {
+                            "code": [
+                                {
+                                    "code": "entity_id",
+                                    "value": "/.ORC-2",
+                                    "format": "hl7terser"
+                                },
+                                {
+                                    "code": "message_id",
+                                    "value": "/.MSH-10",
+                                    "format": "hl7terser"
+                                },
+                                {
+                                    "code": "message_type",
+                                    "value": "/.MSH-9-1",
+                                    "format": "hl7terser"
+                                }
+                            ],
+                            "label": "Identificar Entidad"
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "f3091fcf-d71d-4ab7-a696-fe78df7d9517"
+                            }
+                        ],
+                        "type_id": "entity_identification",
+                        "position": {
+                            "x": 330,
+                            "y": 201.8515625
+                        }
+                    },
+                    {
+                        "id": "f3091fcf-d71d-4ab7-a696-fe78df7d9517",
+                        "data": {
+                            "label": "Wire Tap",
+                            "handles": [
+                                {
+                                    "id": "out0",
+                                    "to": "",
+                                    "color": "blue",
+                                    "title": "Clonar Mensaje",
+                                    "position": "top"
+                                },
+                                {
+                                    "id": "out1",
+                                    "to": "",
+                                    "title": "Continuar Flujo"
+                                }
+                            ]
+                        },
+                        "links": [
+                            {
+                                "handle": "out1",
+                                "node_id": "18c87a37-7481-49ed-920b-d2020e3f8837"
+                            },
+                            {
+                                "handle": "out0",
+                                "node_id": "f1f72556-08af-407c-9957-c242d08ec56b"
+                            }
+                        ],
+                        "type_id": "wireTap",
+                        "position": {
+                            "x": 570,
+                            "y": 200.8515625
+                        }
+                    },
+                    {
+                        "id": "f1f72556-08af-407c-9957-c242d08ec56b",
+                        "data": {
+                            "app": "angie.demo.demo_environment",
+                            "label": "Crear Entidad"
+                        },
+                        "links": [],
+                        "type_id": "entity_extractor",
+                        "position": {
+                            "x": 733.8270069543215,
+                            "y": 91.29512317091356
+                        }
+                    }
+                ],
+                "status": "Started",
+                "enabled": true,
+                "version": 81,
+                "created_on": "2022-02-28T16:20:33.960Z",
+                "last_updated": "2022-02-28T20:11:04.397Z",
+                "messages_sent": 1,
+                "messages_error": 0,
+                "messages_total": 1,
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"8bafebc5-296c-49df-ac4c-7470bb1d88a0\" group=\"his_demo\"><description>TCP/MLLP Input</description>\n    <from uri=\"mllp://0.0.0.0:9001?acceptTimeout%3D60000%26autoAck%3Dtrue%26backlog%3D5%26keepAlive%3Dtrue%26requireEndOfData%3Dtrue%26stringPayload%3Dtrue%26validatePayload%3Dfalse\"/>\n    <unmarshal><hl7/></unmarshal>\n    <to uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" />\n</route><route id=\"313bc5b5-2867-4598-b3ed-683d6150293d\" group=\"\"><description>File Output</description>\n    <from uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\"/>\n    <to uri=\"file:///Users/hernaj34/projects/_events/demo_dh_tools/exchanges?allowNullBody%3Dfalse%26bufferSize%3D131072%26fileExist%3DOverride\"/>\n    <to uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\" />\n</route><route id=\"a910e07a-ea8e-41f7-baf5-5b871233f65f\" group=\"lis_demo\"><description>Fin Flujo</description>\n    <from uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n    \n    \n    <to uri=\"mock:enda910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n</route><route id=\"18c87a37-7481-49ed-920b-d2020e3f8837\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7Encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7Encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\" />\n</route><route id=\"588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" group=\"\"><description>Identificar Entidad</description>\n    <from uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\"/>\n        <setHeader name=\"entity_id\"><hl7terser>/.ORC-2</hl7terser></setHeader>\n<setHeader name=\"message_id\"><hl7terser>/.MSH-10</hl7terser></setHeader>\n<setHeader name=\"message_type\"><hl7terser>/.MSH-9-1</hl7terser></setHeader>\n    <to uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\" />\n</route><route id=\"f3091fcf-d71d-4ab7-a696-fe78df7d9517\" group=\"\"><description>Wire Tap</description>\r\n    <from uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\"/>\r\n        <wireTap uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\r\n    <to uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\" />\r\n    \r\n    <to uri=\"mock:ending\"/>\r\n</route><route id=\"f1f72556-08af-407c-9957-c242d08ec56b\" group=\"\"><description>Crear Entidad</description>\n    <from uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route></routes>"
+            }
+        ],
+        "created_on": "2022-02-28T16:09:51.266Z",
+        "description": "Demo integration",
+        "last_updated": "2022-03-01T09:26:47.403Z",
+        "package_code": "angie.demo",
+        "package_version": "1.0.0"
+    },
+    "package_code": "angie.demo",
+    "package_version": "1.0.0"
+}

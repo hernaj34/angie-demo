@@ -1,0 +1,21 @@
+{
+    "id": "0e7e7309-412f-499c-8df4-968c2b0954c7",
+    "package_code": "angie.demo",
+    "package_version": "1.0.0",
+    "document_type": "entity_mapper",
+    "code": "demo_environment",
+    "data": {
+        "id": "0e7e7309-412f-499c-8df4-968c2b0954c7",
+        "code": "demo_environment",
+        "name": "Demo environment",
+        "entities": [
+            {
+                "code": "order",
+                "message_type": "ORM",
+                "entity_extraction": "{}"
+            }
+        ],
+        "package_code": "angie.demo",
+        "package_version": "1.0.0"
+    }
+}
