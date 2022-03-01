@@ -8,37 +8,6 @@
             {
                 "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
                 "name": "his_to_lis",
-                "agent": {
-                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
-                    "meta": {
-                        "ip": "127.0.0.1",
-                        "platform": "Mac OS X",
-                        "rest_api_port": "6100"
-                    },
-                    "name": "JUM1",
-                    "status": "online",
-                    "options": null,
-                    "approved": true,
-                    "joined_date": "2022-02-14T15:47:55.307Z",
-                    "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "Ay_dONgGoskiXYDEAAAD",
-                    "current_channels": {
-                        "list": [
-                            {
-                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
-                                "name": "his_to_lis",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "1m53s",
-                                    "messages_sent": 0,
-                                    "messages_error": 0,
-                                    "messages_total": 0
-                                }
-                            }
-                        ]
-                    },
-                    "last_online_date": "2022-03-01T09:50:26.311Z"
-                },
                 "nodes": [
                     {
                         "id": "8bafebc5-296c-49df-ac4c-7470bb1d88a0",
@@ -69,8 +38,8 @@
                         ],
                         "type_id": "tcp_input",
                         "position": {
-                            "x": 90,
-                            "y": 194.359375
+                            "x": 88,
+                            "y": 200.359375
                         }
                     },
                     {
@@ -568,33 +537,24 @@
                         "links": [],
                         "type_id": "entity_extractor",
                         "position": {
-                            "x": 733.8270069543215,
-                            "y": 91.29512317091356
+                            "x": 712.8270069543215,
+                            "y": 76.29512317091356
                         }
                     }
                 ],
                 "status": "Started",
                 "enabled": true,
-                "version": 81,
+                "version": 84,
                 "created_on": "2022-02-28T16:20:33.960Z",
-                "last_updated": "2022-02-28T20:11:04.397Z",
+                "last_updated": "2022-03-01T12:43:48.357Z",
                 "messages_sent": 1,
                 "messages_error": 0,
                 "messages_total": 1,
-                "deployment_options": {
-                    "trace_stats": true,
-                    "assigned_agent": [],
-                    "restart_policy": "none",
-                    "agent_assign_mode": "auto",
-                    "trace_incoming_message": true,
-                    "trace_outgoing_message": true
-                },
                 "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"8bafebc5-296c-49df-ac4c-7470bb1d88a0\" group=\"his_demo\"><description>TCP/MLLP Input</description>\n    <from uri=\"mllp://0.0.0.0:9001?acceptTimeout%3D60000%26autoAck%3Dtrue%26backlog%3D5%26keepAlive%3Dtrue%26requireEndOfData%3Dtrue%26stringPayload%3Dtrue%26validatePayload%3Dfalse\"/>\n    <unmarshal><hl7/></unmarshal>\n    <to uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" />\n</route><route id=\"313bc5b5-2867-4598-b3ed-683d6150293d\" group=\"\"><description>File Output</description>\n    <from uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\"/>\n    <to uri=\"file:///Users/hernaj34/projects/_events/demo_dh_tools/exchanges?allowNullBody%3Dfalse%26bufferSize%3D131072%26fileExist%3DOverride\"/>\n    <to uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\" />\n</route><route id=\"a910e07a-ea8e-41f7-baf5-5b871233f65f\" group=\"lis_demo\"><description>Fin Flujo</description>\n    <from uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n    \n    \n    <to uri=\"mock:enda910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n</route><route id=\"18c87a37-7481-49ed-920b-d2020e3f8837\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7Encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7Encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\" />\n</route><route id=\"588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" group=\"\"><description>Identificar Entidad</description>\n    <from uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\"/>\n        <setHeader name=\"entity_id\"><hl7terser>/.ORC-2</hl7terser></setHeader>\n<setHeader name=\"message_id\"><hl7terser>/.MSH-10</hl7terser></setHeader>\n<setHeader name=\"message_type\"><hl7terser>/.MSH-9-1</hl7terser></setHeader>\n    <to uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\" />\n</route><route id=\"f3091fcf-d71d-4ab7-a696-fe78df7d9517\" group=\"\"><description>Wire Tap</description>\r\n    <from uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\"/>\r\n        <wireTap uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\r\n    <to uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\" />\r\n    \r\n    <to uri=\"mock:ending\"/>\r\n</route><route id=\"f1f72556-08af-407c-9957-c242d08ec56b\" group=\"\"><description>Crear Entidad</description>\n    <from uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route></routes>"
             },
             {
                 "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
                 "name": "lis_to_his",
-                "agent": null,
                 "nodes": [
                     {
                         "id": "7d17ad14-f46c-4198-b765-252902eec253",
@@ -724,53 +684,22 @@
                         }
                     }
                 ],
-                "status": "UNDEPLOYED",
+                "status": "Started",
                 "enabled": true,
                 "version": 30,
                 "created_on": "2022-03-01T09:42:52.197Z",
                 "last_updated": "2022-03-01T09:53:50.956Z",
-                "messages_sent": 0,
-                "messages_error": 1,
+                "messages_sent": 1,
+                "messages_error": 0,
                 "messages_total": 1,
-                "deployment_options": {
-                    "trace_stats": true,
-                    "restart_policy": "none",
-                    "agent_assign_mode": "auto",
-                    "trace_incoming_message": true,
-                    "trace_outgoing_message": true
-                },
                 "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"7d17ad14-f46c-4198-b765-252902eec253\" group=\"lis_demo\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/send_results?async%3Dfalse%26enableCORS%3Dfalse\"/>\n    \n        <unmarshal><json/></unmarshal>    <to uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\" />\n</route><route id=\"ace30340-6eec-47cc-861e-8cfe958987f4\" group=\"\"><description>Identificar Entidad</description>\n    <from uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\"/>\n        <setHeader name=\"entity_id\"><simple>${body['entity']}</simple></setHeader>\n<setHeader name=\"message_id\"><simple>${body['id']}</simple></setHeader>\n<setHeader name=\"message_type\"><simple>${body['type']}</simple></setHeader>\n    <to uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\" />\n</route><route id=\"255377ac-d502-475a-b820-1c921fb39d12\" group=\"his_demo\"><description>Fin Flujo</description>\n    <from uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\"/>\n    \n    \n    <to uri=\"mock:end255377ac-d502-475a-b820-1c921fb39d12\"/>\n</route><route id=\"f69bf69e-66a4-4570-b6cd-1b3241ea4f07\" group=\"\"><description>Crear Entidad</description>\n    <from uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route><route id=\"3a765275-15dc-4046-b199-8e8343921c8a\" group=\"\"><description>Wire Tap</description>\r\n    <from uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\"/>\r\n        <wireTap uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\r\n    <to uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\" />\r\n    \r\n    <to uri=\"mock:ending\"/>\r\n</route></routes>"
             }
         ],
         "created_on": "2022-02-28T16:09:51.266Z",
         "description": "Demo integration",
-        "last_updated": "2022-03-01T09:53:56.714Z",
+        "last_updated": "2022-03-01T12:44:00.762Z",
         "package_code": "angie.demo",
-        "package_version": "1.0.0",
-        "deployment_config": {
-            "id": "c3980845-4bbf-477b-b934-f2de2fa24c50",
-            "enabled": true,
-            "channel_config": {
-                "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd": {
-                    "trace_stats": true,
-                    "assigned_agent": [],
-                    "restart_policy": "none",
-                    "agent_assign_mode": "auto",
-                    "trace_incoming_message": true,
-                    "trace_outgoing_message": true
-                },
-                "4fdcaec6-a00c-485b-a076-32de7bef0bbc": {
-                    "trace_stats": true,
-                    "restart_policy": "none",
-                    "agent_assign_mode": "auto",
-                    "trace_incoming_message": true,
-                    "trace_outgoing_message": true
-                }
-            },
-            "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
-            "deployment_config": null,
-            "last_deployment_date": "2022-03-01T09:53:56.715Z"
-        }
+        "package_version": "1.0.0"
     },
     "package_code": "angie.demo",
     "package_version": "1.0.0"
