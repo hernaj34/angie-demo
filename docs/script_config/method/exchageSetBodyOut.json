@@ -1,0 +1,38 @@
+{
+    "id": 72,
+    "package_code": "angie.demo",
+    "package_version": "1.0.0",
+    "document_type": "method",
+    "code": "exchageSetBodyOut",
+    "data": {
+        "id": 72,
+        "code": "exchageSetBodyOut",
+        "name": "Set body out",
+        "type": {
+            "type": "void"
+        },
+        "isActive": true,
+        "language": "groovy",
+        "parentType": {
+            "type": "object",
+            "objectCode": "angie.core.camel_exchange"
+        },
+        "sourceCode": "self.getOut().setBody(params.message);",
+        "description": "",
+        "package_code": "angie.demo",
+        "paramMembers": [
+            {
+                "code": "message",
+                "name": "Mensage",
+                "type": {
+                    "type": "string"
+                },
+                "required": false
+            }
+        ],
+        "renderTemplate": "Seet body out {{message}}",
+        "complexityLevel": 1,
+        "package_version": "1.0.0",
+        "sourceCodeForBinaryOperator": ""
+    }
+}

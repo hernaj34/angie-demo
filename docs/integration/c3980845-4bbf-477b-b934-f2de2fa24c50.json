@@ -7,7 +7,49 @@
         "channels": [
             {
                 "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
-                "name": "his_to_lis",
+                "name": "his_to_sequencer",
+                "agent": {
+                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
+                    "meta": {
+                        "ip": "127.0.0.1",
+                        "platform": "Mac OS X",
+                        "rest_api_port": "6100"
+                    },
+                    "name": "JUM1",
+                    "status": "online",
+                    "options": null,
+                    "approved": true,
+                    "joined_date": "2022-02-14T15:47:55.307Z",
+                    "approved_date": "2022-02-14T15:48:33.765Z",
+                    "last_socket_id": "iM0mvqilxNRltjp5AAAD",
+                    "current_channels": {
+                        "list": [
+                            {
+                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
+                                "name": "his_to_sequencer",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "3s519ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            },
+                            {
+                                "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
+                                "name": "list_to_his",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "2s180ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            }
+                        ]
+                    },
+                    "last_online_date": "2022-03-17T12:27:55.353Z"
+                },
                 "nodes": [
                     {
                         "id": "8bafebc5-296c-49df-ac4c-7470bb1d88a0",
@@ -62,8 +104,8 @@
                         ],
                         "type_id": "file_output",
                         "position": {
-                            "x": 965,
-                            "y": 205.359375
+                            "x": 1038,
+                            "y": 201.359375
                         }
                     },
                     {
@@ -71,21 +113,21 @@
                         "data": {
                             "code": "",
                             "tags": [
-                                "lis_demo"
+                                "sequencer"
                             ],
                             "label": "Fin Flujo"
                         },
                         "links": [],
                         "type_id": "end",
                         "position": {
-                            "x": 1175,
-                            "y": 206.359375
+                            "x": 1295,
+                            "y": 200.359375
                         }
                     },
                     {
                         "id": "18c87a37-7481-49ed-920b-d2020e3f8837",
                         "data": {
-                            "code": "import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7Encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7Encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End",
+                            "code": "import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7_encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7_encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End",
                             "label": "Visual Groovy Code",
                             "script": {
                                 "language": "groovy",
@@ -131,7 +173,7 @@
                                             ]
                                         },
                                         {
-                                            "id": "6b045951-1753-4c0c-b19d-9c92bd35a20b",
+                                            "id": "e4ee2480-668c-49e4-9fc1-e8ba7be0829d",
                                             "name": "Nuevo grupo de expresiones",
                                             "type": "expressionGroup",
                                             "expressions": [
@@ -385,8 +427,8 @@
                                                                         "memberType": "variable"
                                                                     },
                                                                     {
-                                                                        "code": "hl7Encode",
-                                                                        "name": "Encode",
+                                                                        "code": "hl7_encode",
+                                                                        "name": "Convertir a texto",
                                                                         "type": {
                                                                             "type": "string"
                                                                         },
@@ -399,9 +441,9 @@
                                                                         },
                                                                         "sourceCode": "return self.encode();",
                                                                         "description": "",
-                                                                        "package_code": "angie.core",
+                                                                        "package_code": "angie.demo",
                                                                         "paramMembers": [],
-                                                                        "renderTemplate": "Encode",
+                                                                        "renderTemplate": "Convertir a texto",
                                                                         "complexityLevel": 1,
                                                                         "package_version": "1.0.0",
                                                                         "sourceCodeForBinaryOperator": ""
@@ -455,8 +497,8 @@
                         ],
                         "type_id": "groovy_visual",
                         "position": {
-                            "x": 767,
-                            "y": 204.359375
+                            "x": 810,
+                            "y": 202.359375
                         }
                     },
                     {
@@ -479,7 +521,7 @@
                                     "format": "hl7terser"
                                 }
                             ],
-                            "label": "Identificar Entidad"
+                            "label": "Identify order"
                         },
                         "links": [
                             {
@@ -532,7 +574,7 @@
                         "id": "f1f72556-08af-407c-9957-c242d08ec56b",
                         "data": {
                             "app": "angie.demo.demo_environment",
-                            "label": "Crear Entidad"
+                            "label": "Create order entity"
                         },
                         "links": [],
                         "type_id": "entity_extractor",
@@ -544,47 +586,69 @@
                 ],
                 "status": "Started",
                 "enabled": true,
-                "version": 84,
+                "version": 97,
                 "created_on": "2022-02-28T16:20:33.960Z",
-                "last_updated": "2022-03-01T12:43:48.357Z",
+                "last_updated": "2022-03-17T14:48:50.287Z",
                 "messages_sent": 1,
                 "messages_error": 0,
                 "messages_total": 1,
-                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"8bafebc5-296c-49df-ac4c-7470bb1d88a0\" group=\"his_demo\"><description>TCP/MLLP Input</description>\n    <from uri=\"mllp://0.0.0.0:9001?acceptTimeout%3D60000%26autoAck%3Dtrue%26backlog%3D5%26keepAlive%3Dtrue%26requireEndOfData%3Dtrue%26stringPayload%3Dtrue%26validatePayload%3Dfalse\"/>\n    <unmarshal><hl7/></unmarshal>\n    <to uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" />\n</route><route id=\"313bc5b5-2867-4598-b3ed-683d6150293d\" group=\"\"><description>File Output</description>\n    <from uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\"/>\n    <to uri=\"file:///Users/hernaj34/projects/_events/demo_dh_tools/exchanges?allowNullBody%3Dfalse%26bufferSize%3D131072%26fileExist%3DOverride\"/>\n    <to uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\" />\n</route><route id=\"a910e07a-ea8e-41f7-baf5-5b871233f65f\" group=\"lis_demo\"><description>Fin Flujo</description>\n    <from uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n    \n    \n    <to uri=\"mock:enda910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n</route><route id=\"18c87a37-7481-49ed-920b-d2020e3f8837\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7Encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7Encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\" />\n</route><route id=\"588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" group=\"\"><description>Identificar Entidad</description>\n    <from uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\"/>\n        <setHeader name=\"entity_id\"><hl7terser>/.ORC-2</hl7terser></setHeader>\n<setHeader name=\"message_id\"><hl7terser>/.MSH-10</hl7terser></setHeader>\n<setHeader name=\"message_type\"><hl7terser>/.MSH-9-1</hl7terser></setHeader>\n    <to uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\" />\n</route><route id=\"f3091fcf-d71d-4ab7-a696-fe78df7d9517\" group=\"\"><description>Wire Tap</description>\r\n    <from uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\"/>\r\n        <wireTap uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\r\n    <to uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\" />\r\n    \r\n    <to uri=\"mock:ending\"/>\r\n</route><route id=\"f1f72556-08af-407c-9957-c242d08ec56b\" group=\"\"><description>Crear Entidad</description>\n    <from uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route></routes>"
+                "deployment_options": {
+                    "trace_stats": true,
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                },
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"8bafebc5-296c-49df-ac4c-7470bb1d88a0\" group=\"his_demo\"><description>TCP/MLLP Input</description>\n    <from uri=\"mllp://0.0.0.0:9001?acceptTimeout%3D60000%26autoAck%3Dtrue%26backlog%3D5%26keepAlive%3Dtrue%26requireEndOfData%3Dtrue%26stringPayload%3Dtrue%26validatePayload%3Dfalse\"/>\n    <unmarshal><hl7/></unmarshal>\n    <to uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" />\n</route><route id=\"313bc5b5-2867-4598-b3ed-683d6150293d\" group=\"\"><description>File Output</description>\n    <from uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\"/>\n    <to uri=\"file:///Users/hernaj34/projects/_events/demo_dh_tools/exchanges?allowNullBody%3Dfalse%26bufferSize%3D131072%26fileExist%3DOverride\"/>\n    <to uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\" />\n</route><route id=\"a910e07a-ea8e-41f7-baf5-5b871233f65f\" group=\"sequencer\"><description>Fin Flujo</description>\n    <from uri=\"direct:a910e07a-ea8e-41f7-baf5-5b871233f65f\"/>\n    <to uri=\"stub:enda910e07a-ea8e-41f7-baf5-5b871233f65f?discardIfNoConsumers=true\"/>\n</route><route id=\"18c87a37-7481-49ed-920b-d2020e3f8837\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\nimport ca.uhn.hl7v2.model.Message;\nimport ca.uhn.hl7v2.util.Terser;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef any_setter(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    nestedSet(context.variables, variablePath, params.value);\n}\n\ndef requestGetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.getBody(ca.uhn.hl7v2.model.Message.class);\n}\n\ndef hl7TerserSet(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    Terser terser = new Terser(self);\n    params.path = resolveTemplate(params.path, context);\n    params.value = resolveTemplate(params.value, context);\n    terser.set(params.path,params.value);\n}\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\ndef hl7_encode(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    return self.encode();\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nany_setter(context?.variables?.hl7, [ params: [\"value\": requestGetBody(context?.request, [ params: [:], context: context])], variablePath: [\"hl7\"], context: context]);\nhl7TerserSet(context?.variables?.hl7, [ params: [\"path\": \"/.MSH-3-1\", \"value\": \"ORIGIN_MODIFIED\"], variablePath: [\"hl7\"], context: context]);\nexchangeSetBody(context?.exchange, [ params: [\"body\": hl7_encode(context?.variables?.hl7, [ params: [:], variablePath: [\"hl7\"], context: context])], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:313bc5b5-2867-4598-b3ed-683d6150293d\" />\n</route><route id=\"588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\" group=\"\"><description>Identify order</description>\n    <from uri=\"direct:588a6459-e0c7-4115-b8c1-9a92fa0a8fdc\"/>\n        <setHeader name=\"entity_id\"><hl7terser>/.ORC-2</hl7terser></setHeader>\n<setHeader name=\"message_id\"><hl7terser>/.MSH-10</hl7terser></setHeader>\n<setHeader name=\"message_type\"><hl7terser>/.MSH-9-1</hl7terser></setHeader>\n    <to uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\" />\n</route><route id=\"f3091fcf-d71d-4ab7-a696-fe78df7d9517\" group=\"\"><description>Wire Tap</description>\n    <from uri=\"direct:f3091fcf-d71d-4ab7-a696-fe78df7d9517\"/>\n    <wireTap uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\n    <to uri=\"direct:18c87a37-7481-49ed-920b-d2020e3f8837\" />\n    <to uri=\"stub:endf3091fcf-d71d-4ab7-a696-fe78df7d9517?discardIfNoConsumers=true\"/>\n</route><route id=\"f1f72556-08af-407c-9957-c242d08ec56b\" group=\"\"><description>Create order entity</description>\n    <from uri=\"direct:f1f72556-08af-407c-9957-c242d08ec56b\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route></routes>"
             },
             {
                 "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
-                "name": "lis_to_his",
-                "nodes": [
-                    {
-                        "id": "7d17ad14-f46c-4198-b765-252902eec253",
-                        "data": {
-                            "path": "/send_results",
-                            "port": 8888,
-                            "tags": [
-                                "lis_demo"
-                            ],
-                            "label": "HTTP Input",
-                            "hostname": "0.0.0.0",
-                            "protocol": "jetty:http",
-                            "out_format": "json",
-                            "query_params": {
-                                "async": false,
-                                "enableCORS": false
-                            }
-                        },
-                        "links": [
-                            {
-                                "handle": null,
-                                "node_id": "ace30340-6eec-47cc-861e-8cfe958987f4"
-                            }
-                        ],
-                        "type_id": "http_input",
-                        "position": {
-                            "x": 77,
-                            "y": 119.8515625
-                        }
+                "name": "list_to_his",
+                "agent": {
+                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
+                    "meta": {
+                        "ip": "127.0.0.1",
+                        "platform": "Mac OS X",
+                        "rest_api_port": "6100"
                     },
+                    "name": "JUM1",
+                    "status": "online",
+                    "options": null,
+                    "approved": true,
+                    "joined_date": "2022-02-14T15:47:55.307Z",
+                    "approved_date": "2022-02-14T15:48:33.765Z",
+                    "last_socket_id": "iM0mvqilxNRltjp5AAAD",
+                    "current_channels": {
+                        "list": [
+                            {
+                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
+                                "name": "his_to_sequencer",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "3s519ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            },
+                            {
+                                "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
+                                "name": "list_to_his",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "2s253ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            }
+                        ]
+                    },
+                    "last_online_date": "2022-03-17T12:27:55.353Z"
+                },
+                "nodes": [
                     {
                         "id": "ace30340-6eec-47cc-861e-8cfe958987f4",
                         "data": {
@@ -605,7 +669,7 @@
                                     "format": "simple"
                                 }
                             ],
-                            "label": "Identificar Entidad"
+                            "label": "Indentify order"
                         },
                         "links": [
                             {
@@ -622,24 +686,24 @@
                     {
                         "id": "255377ac-d502-475a-b820-1c921fb39d12",
                         "data": {
-                            "code": "",
+                            "code": "{\n    \"message\": \"Received in HIS\"\n}",
                             "tags": [
                                 "his_demo"
                             ],
-                            "label": "Fin Flujo"
+                            "label": "End of flow"
                         },
                         "links": [],
                         "type_id": "end",
                         "position": {
                             "x": 760,
-                            "y": 118.8515625
+                            "y": 117.8515625
                         }
                     },
                     {
                         "id": "f69bf69e-66a4-4570-b6cd-1b3241ea4f07",
                         "data": {
                             "app": "angie.demo.demo_environment",
-                            "label": "Crear Entidad"
+                            "label": "Create order entity"
                         },
                         "links": [],
                         "type_id": "entity_extractor",
@@ -682,24 +746,254 @@
                             "x": 501,
                             "y": 117.8515625
                         }
+                    },
+                    {
+                        "id": "3749718a-55bd-458a-82b5-5e1d6001209a",
+                        "data": {
+                            "path": "/send_results",
+                            "port": 8888,
+                            "tags": [
+                                "lis_demo"
+                            ],
+                            "label": "HTTP Input",
+                            "hostname": "0.0.0.0",
+                            "protocol": "jetty:http",
+                            "out_format": "json",
+                            "query_params": {
+                                "enableCORS": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "ace30340-6eec-47cc-861e-8cfe958987f4"
+                            }
+                        ],
+                        "type_id": "http_input",
+                        "position": {
+                            "x": 65,
+                            "y": 117.359375
+                        }
                     }
                 ],
                 "status": "Started",
                 "enabled": true,
-                "version": 30,
+                "version": 52,
                 "created_on": "2022-03-01T09:42:52.197Z",
-                "last_updated": "2022-03-01T09:53:50.956Z",
+                "last_updated": "2022-03-17T14:54:50.293Z",
                 "messages_sent": 1,
                 "messages_error": 0,
                 "messages_total": 1,
-                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"7d17ad14-f46c-4198-b765-252902eec253\" group=\"lis_demo\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/send_results?async%3Dfalse%26enableCORS%3Dfalse\"/>\n    \n        <unmarshal><json/></unmarshal>    <to uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\" />\n</route><route id=\"ace30340-6eec-47cc-861e-8cfe958987f4\" group=\"\"><description>Identificar Entidad</description>\n    <from uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\"/>\n        <setHeader name=\"entity_id\"><simple>${body['entity']}</simple></setHeader>\n<setHeader name=\"message_id\"><simple>${body['id']}</simple></setHeader>\n<setHeader name=\"message_type\"><simple>${body['type']}</simple></setHeader>\n    <to uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\" />\n</route><route id=\"255377ac-d502-475a-b820-1c921fb39d12\" group=\"his_demo\"><description>Fin Flujo</description>\n    <from uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\"/>\n    \n    \n    <to uri=\"mock:end255377ac-d502-475a-b820-1c921fb39d12\"/>\n</route><route id=\"f69bf69e-66a4-4570-b6cd-1b3241ea4f07\" group=\"\"><description>Crear Entidad</description>\n    <from uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route><route id=\"3a765275-15dc-4046-b199-8e8343921c8a\" group=\"\"><description>Wire Tap</description>\r\n    <from uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\"/>\r\n        <wireTap uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\r\n    <to uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\" />\r\n    \r\n    <to uri=\"mock:ending\"/>\r\n</route></routes>"
+                "deployment_options": {
+                    "trace_stats": true,
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                },
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"ace30340-6eec-47cc-861e-8cfe958987f4\" group=\"\"><description>Indentify order</description>\n    <from uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\"/>\n        <setHeader name=\"entity_id\"><simple>${body['entity']}</simple></setHeader>\n<setHeader name=\"message_id\"><simple>${body['id']}</simple></setHeader>\n<setHeader name=\"message_type\"><simple>${body['type']}</simple></setHeader>\n    <to uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\" />\n</route><route id=\"255377ac-d502-475a-b820-1c921fb39d12\" group=\"his_demo\"><description>End of flow</description>\n    <from uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\"/>\n    <setBody>\n        <simple trim=\"false\">\n<![CDATA[{\n    \"message\": \"Received in HIS\"\n}]]>\n        </simple>\n    </setBody>\n    <to uri=\"stub:end255377ac-d502-475a-b820-1c921fb39d12?discardIfNoConsumers=true\"/>\n</route><route id=\"f69bf69e-66a4-4570-b6cd-1b3241ea4f07\" group=\"\"><description>Create order entity</description>\n    <from uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route><route id=\"3a765275-15dc-4046-b199-8e8343921c8a\" group=\"\"><description>Wire Tap</description>\n    <from uri=\"direct:3a765275-15dc-4046-b199-8e8343921c8a\"/>\n    <wireTap uri=\"direct:f69bf69e-66a4-4570-b6cd-1b3241ea4f07\"/>\n    <to uri=\"direct:255377ac-d502-475a-b820-1c921fb39d12\" />\n    <to uri=\"stub:end3a765275-15dc-4046-b199-8e8343921c8a?discardIfNoConsumers=true\"/>\n</route><route id=\"3749718a-55bd-458a-82b5-5e1d6001209a\" group=\"lis_demo\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/send_results?enableCORS%3Dfalse\"/>\n    \n        <unmarshal><json/></unmarshal>    <to uri=\"direct:ace30340-6eec-47cc-861e-8cfe958987f4\" />\n</route></routes>"
+            },
+            {
+                "id": "a0ebb003-cb06-4e10-9799-894435a30959",
+                "name": "sequencer_to_lis",
+                "agent": null,
+                "nodes": [
+                    {
+                        "id": "11363929-3df2-4ee1-b415-26231dfcf811",
+                        "data": {
+                            "path": "/send_to_lis",
+                            "port": 8888,
+                            "tags": [
+                                "sequencer"
+                            ],
+                            "label": "HTTP Input",
+                            "hostname": "0.0.0.0",
+                            "protocol": "jetty:http",
+                            "out_format": "json",
+                            "query_params": {
+                                "enableCORS": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "75ab15f1-7cf6-4572-a5ae-ec381cec7a17"
+                            }
+                        ],
+                        "type_id": "http_input",
+                        "position": {
+                            "x": 77,
+                            "y": 85.8515625
+                        }
+                    },
+                    {
+                        "id": "75ab15f1-7cf6-4572-a5ae-ec381cec7a17",
+                        "data": {
+                            "code": [
+                                {
+                                    "code": "entity_id",
+                                    "value": "${body['entity']}",
+                                    "format": "simple"
+                                },
+                                {
+                                    "code": "message_id",
+                                    "value": "${body['id']}",
+                                    "format": "simple"
+                                },
+                                {
+                                    "code": "message_type",
+                                    "value": "${body['type']}",
+                                    "format": "simple"
+                                }
+                            ],
+                            "label": "Identify order"
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "8b00732e-30b5-41d8-bc4a-ce856cbfa96c"
+                            }
+                        ],
+                        "type_id": "entity_identification",
+                        "position": {
+                            "x": 297,
+                            "y": 87.8515625
+                        }
+                    },
+                    {
+                        "id": "8b00732e-30b5-41d8-bc4a-ce856cbfa96c",
+                        "data": {
+                            "label": "Wire Tap",
+                            "handles": [
+                                {
+                                    "id": "out0",
+                                    "to": "",
+                                    "color": "blue",
+                                    "title": "Clonar Mensaje",
+                                    "position": "top"
+                                },
+                                {
+                                    "id": "out1",
+                                    "to": "",
+                                    "title": "Continuar Flujo"
+                                }
+                            ]
+                        },
+                        "links": [
+                            {
+                                "handle": "out0",
+                                "node_id": "d8bd272d-7c1d-412f-9535-d14f6c8c19bd"
+                            },
+                            {
+                                "handle": "out1",
+                                "node_id": "b96d00b6-0045-42b0-9dc0-06edfb541c62"
+                            }
+                        ],
+                        "type_id": "wireTap",
+                        "position": {
+                            "x": 518,
+                            "y": 88.8515625
+                        }
+                    },
+                    {
+                        "id": "d8bd272d-7c1d-412f-9535-d14f6c8c19bd",
+                        "data": {
+                            "app": "angie.demo.demo_environment",
+                            "label": "Create order entity"
+                        },
+                        "links": [],
+                        "type_id": "entity_extractor",
+                        "position": {
+                            "x": 737,
+                            "y": 12.8515625
+                        }
+                    },
+                    {
+                        "id": "b96d00b6-0045-42b0-9dc0-06edfb541c62",
+                        "data": {
+                            "code": "{\n    \"message\": \"Received in LIS\"\n}",
+                            "tags": [
+                                "lis_demo"
+                            ],
+                            "label": "End of flow"
+                        },
+                        "links": [],
+                        "type_id": "end",
+                        "position": {
+                            "x": 742,
+                            "y": 94.8515625
+                        }
+                    }
+                ],
+                "status": "UNDEPLOYED",
+                "enabled": true,
+                "version": 34,
+                "created_on": "2022-03-17T14:40:09.778Z",
+                "last_updated": "2022-03-17T14:55:00.333Z",
+                "messages_sent": 1,
+                "messages_error": 0,
+                "messages_total": 1,
+                "deployment_options": {
+                    "trace_stats": true,
+                    "assigned_agent": [
+                        "e9cbba1d-88b1-461f-94a9-7f4e426ead3d"
+                    ],
+                    "restart_policy": "none",
+                    "agent_assign_mode": "fixed",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                },
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"11363929-3df2-4ee1-b415-26231dfcf811\" group=\"sequencer\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/send_to_lis?enableCORS%3Dfalse\"/>\n    \n        <unmarshal><json/></unmarshal>    <to uri=\"direct:75ab15f1-7cf6-4572-a5ae-ec381cec7a17\" />\n</route><route id=\"75ab15f1-7cf6-4572-a5ae-ec381cec7a17\" group=\"\"><description>Identify order</description>\n    <from uri=\"direct:75ab15f1-7cf6-4572-a5ae-ec381cec7a17\"/>\n        <setHeader name=\"entity_id\"><simple>${body['entity']}</simple></setHeader>\n<setHeader name=\"message_id\"><simple>${body['id']}</simple></setHeader>\n<setHeader name=\"message_type\"><simple>${body['type']}</simple></setHeader>\n    <to uri=\"direct:8b00732e-30b5-41d8-bc4a-ce856cbfa96c\" />\n</route><route id=\"8b00732e-30b5-41d8-bc4a-ce856cbfa96c\" group=\"\"><description>Wire Tap</description>\n    <from uri=\"direct:8b00732e-30b5-41d8-bc4a-ce856cbfa96c\"/>\n    <wireTap uri=\"direct:d8bd272d-7c1d-412f-9535-d14f6c8c19bd\"/>\n    <to uri=\"direct:b96d00b6-0045-42b0-9dc0-06edfb541c62\" />\n    <to uri=\"stub:end8b00732e-30b5-41d8-bc4a-ce856cbfa96c?discardIfNoConsumers=true\"/>\n</route><route id=\"d8bd272d-7c1d-412f-9535-d14f6c8c19bd\" group=\"\"><description>Create order entity</description>\n    <from uri=\"direct:d8bd272d-7c1d-412f-9535-d14f6c8c19bd\"/>\n        \n            <setHeader name=\"organization\"><constant>994e852b-80d0-4382-8f6f-3a60036633ce</constant></setHeader>\n            <choice>\n                <when>\n                            <simple>${headers.message_type} == \"ORM\"</simple>\n                            <setHeader name=\"entity_type\"><constant>order</constant></setHeader>\n                            <setBody><simple>{}</simple></setBody>\n                        </when>\n                <otherwise>\n                    <setHeader name=\"entity_type\"><constant>unknown</constant></setHeader>\n                    <setBody><simple>{}</simple></setBody>\n                </otherwise>\n            </choice>\n            <unmarshal><json/></unmarshal>\n            <process ref=\"entityGenerator\"/>\n            <to uri=\"mock:store\"/>\n        \n    <to uri=\"log:entity_creation\"/>\n</route><route id=\"b96d00b6-0045-42b0-9dc0-06edfb541c62\" group=\"lis_demo\"><description>End of flow</description>\n    <from uri=\"direct:b96d00b6-0045-42b0-9dc0-06edfb541c62\"/>\n    <setBody>\n        <simple trim=\"false\">\n<![CDATA[{\n    \"message\": \"Received in LIS\"\n}]]>\n        </simple>\n    </setBody>\n    <to uri=\"stub:endb96d00b6-0045-42b0-9dc0-06edfb541c62?discardIfNoConsumers=true\"/>\n</route></routes>"
             }
         ],
         "created_on": "2022-02-28T16:09:51.266Z",
         "description": "Demo integration",
-        "last_updated": "2022-03-01T12:44:00.762Z",
+        "last_updated": "2022-03-17T14:55:27.690Z",
         "package_code": "angie.demo",
-        "package_version": "1.0.0"
+        "package_version": "1.0.0",
+        "deployment_config": {
+            "id": "c3980845-4bbf-477b-b934-f2de2fa24c50",
+            "enabled": true,
+            "channel_config": {
+                "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd": {
+                    "trace_stats": true,
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                },
+                "4fdcaec6-a00c-485b-a076-32de7bef0bbc": {
+                    "trace_stats": true,
+                    "restart_policy": "none",
+                    "agent_assign_mode": "auto",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                },
+                "a0ebb003-cb06-4e10-9799-894435a30959": {
+                    "trace_stats": true,
+                    "assigned_agent": [
+                        "e9cbba1d-88b1-461f-94a9-7f4e426ead3d"
+                    ],
+                    "restart_policy": "none",
+                    "agent_assign_mode": "fixed",
+                    "days_prune_messages": 7,
+                    "days_prune_metadata": 7,
+                    "trace_incoming_message": true,
+                    "trace_outgoing_message": true
+                }
+            },
+            "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
+            "deployment_config": null,
+            "last_deployment_date": "2022-03-17T14:55:27.691Z"
+        }
     },
     "package_code": "angie.demo",
     "package_version": "1.0.0"

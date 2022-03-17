@@ -1,0 +1,216 @@
+{
+    "id": "8e16ba2e-cdf8-4d33-bddd-0404c2696390",
+    "name": "test",
+    "data": {
+        "id": "8e16ba2e-cdf8-4d33-bddd-0404c2696390",
+        "name": "test",
+        "channels": [
+            {
+                "id": "1441c1b5-77fc-4ab7-8761-edf817478a1f",
+                "name": "plastic_marsupial",
+                "agent": null,
+                "nodes": [
+                    {
+                        "id": "e3eed534-a362-4dc3-a11b-3c092ad2d364",
+                        "data": {
+                            "path": "/test",
+                            "port": 8888,
+                            "label": "HTTP Input",
+                            "hostname": "0.0.0.0",
+                            "protocol": "jetty:http",
+                            "out_format": "json",
+                            "query_params": {
+                                "async": false,
+                                "enableCORS": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "ed7f3025-68b1-4569-bdd7-ebaf554c353e"
+                            }
+                        ],
+                        "type_id": "http_input",
+                        "position": {
+                            "x": 93,
+                            "y": 104.8515625
+                        }
+                    },
+                    {
+                        "id": "ed7f3025-68b1-4569-bdd7-ebaf554c353e",
+                        "data": {
+                            "code": "import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef exchageSetBodyOut(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getOut().setBody(params.message);\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nexchageSetBodyOut(context?.exchange, [ params: [\"message\": \"{\\\"message\\\": \\\"Body out\\\"}\"], context: context]);\n\n// End",
+                            "label": "Visual Groovy Code",
+                            "script": {
+                                "language": "groovy",
+                                "contextCode": "angie.core.camel_context_groovy",
+                                "contextMember": {
+                                    "code": "context",
+                                    "name": "context",
+                                    "type": {
+                                        "type": "object",
+                                        "objectCode": "angie.core.camel_context"
+                                    },
+                                    "memberType": "context"
+                                },
+                                "mainStatement": {
+                                    "id": "main-block",
+                                    "main": true,
+                                    "type": "block",
+                                    "variables": {},
+                                    "nestedStatements": [
+                                        {
+                                            "id": "start",
+                                            "name": "Inicio",
+                                            "type": "start"
+                                        },
+                                        {
+                                            "id": "9e0cd5af-28c6-4c92-9e01-2457cfe828a4",
+                                            "name": "Nuevo grupo de expresiones",
+                                            "type": "expressionGroup",
+                                            "expressions": [
+                                                [
+                                                    {
+                                                        "code": "context",
+                                                        "name": "context",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_context"
+                                                        },
+                                                        "memberType": "context"
+                                                    },
+                                                    {
+                                                        "code": "exchange",
+                                                        "name": "Exchange",
+                                                        "type": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "memberType": "property",
+                                                        "complexityLevel": 1
+                                                    },
+                                                    {
+                                                        "id": 72,
+                                                        "code": "exchageSetBodyOut",
+                                                        "name": "Set body out",
+                                                        "type": {
+                                                            "type": "void"
+                                                        },
+                                                        "params": {
+                                                            "message": "{\"message\": \"Body out\"}"
+                                                        },
+                                                        "isActive": true,
+                                                        "language": "groovy",
+                                                        "memberType": "method",
+                                                        "parentType": {
+                                                            "type": "object",
+                                                            "objectCode": "angie.core.camel_exchange"
+                                                        },
+                                                        "sourceCode": "self.getIn().setBody(params.message);",
+                                                        "description": "",
+                                                        "package_code": "angie.demo",
+                                                        "paramMembers": [
+                                                            {
+                                                                "code": "message",
+                                                                "name": "Mensage",
+                                                                "type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "renderTemplate": "Seet body out {{message}}",
+                                                        "complexityLevel": 1,
+                                                        "package_version": "1.0.0",
+                                                        "sourceCodeForBinaryOperator": ""
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "id": "end",
+                                            "name": "Fin",
+                                            "type": "end"
+                                        }
+                                    ]
+                                }
+                            },
+                            "beforeSave": "generateCode"
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "ef8466ad-c444-4433-ae39-6420914487d3"
+                            }
+                        ],
+                        "type_id": "groovy_visual",
+                        "position": {
+                            "x": 383,
+                            "y": 106.8515625
+                        }
+                    },
+                    {
+                        "id": "ef8466ad-c444-4433-ae39-6420914487d3",
+                        "data": {
+                            "type": "file",
+                            "label": "File Output",
+                            "directory": "/Users/hernaj34/tmp/demo_angie/exchanges",
+                            "query_params": {
+                                "bufferSize": 131072,
+                                "allowNullBody": false
+                            }
+                        },
+                        "links": [
+                            {
+                                "handle": null,
+                                "node_id": "c4f6eeff-d8f9-4196-81c6-29b55d45f2f5"
+                            }
+                        ],
+                        "type_id": "file_output",
+                        "position": {
+                            "x": 618,
+                            "y": 105.8515625
+                        }
+                    },
+                    {
+                        "id": "c4f6eeff-d8f9-4196-81c6-29b55d45f2f5",
+                        "data": {
+                            "code": "",
+                            "label": "Fin Flujo"
+                        },
+                        "links": [],
+                        "type_id": "end",
+                        "position": {
+                            "x": 841,
+                            "y": 107.8515625
+                        }
+                    }
+                ],
+                "status": "UNDEPLOYED",
+                "enabled": true,
+                "version": 18,
+                "created_on": "2022-03-14T14:03:42.014Z",
+                "last_updated": "2022-03-14T14:21:10.870Z",
+                "messages_sent": 4,
+                "messages_error": 0,
+                "messages_total": 4,
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"e3eed534-a362-4dc3-a11b-3c092ad2d364\" group=\"\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/test?async%3Dfalse%26enableCORS%3Dfalse\"/>\n    \n        <unmarshal><json/></unmarshal>    <to uri=\"direct:ed7f3025-68b1-4569-bdd7-ebaf554c353e\" />\n</route><route id=\"ed7f3025-68b1-4569-bdd7-ebaf554c353e\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:ed7f3025-68b1-4569-bdd7-ebaf554c353e\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef exchageSetBodyOut(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getOut().setBody(params.message);\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nexchageSetBodyOut(context?.exchange, [ params: [\"message\": \"{\\\"message\\\": \\\"Body out\\\"}\"], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:ef8466ad-c444-4433-ae39-6420914487d3\" />\n</route><route id=\"ef8466ad-c444-4433-ae39-6420914487d3\" group=\"\"><description>File Output</description>\n    <from uri=\"direct:ef8466ad-c444-4433-ae39-6420914487d3\"/>\n    <to uri=\"file:///Users/hernaj34/tmp/demo_angie/exchanges?allowNullBody%3Dfalse%26bufferSize%3D131072\"/>\n    <to uri=\"direct:c4f6eeff-d8f9-4196-81c6-29b55d45f2f5\" />\n</route><route id=\"c4f6eeff-d8f9-4196-81c6-29b55d45f2f5\" group=\"\"><description>Fin Flujo</description>\n    <from uri=\"direct:c4f6eeff-d8f9-4196-81c6-29b55d45f2f5\"/>\n    \n    \n    <to uri=\"mock:endc4f6eeff-d8f9-4196-81c6-29b55d45f2f5\"/>\n</route></routes>"
+            }
+        ],
+        "created_on": "2022-03-14T14:03:30.106Z",
+        "description": "test",
+        "last_updated": "2022-03-14T14:21:20.536Z",
+        "package_code": "angie.demo",
+        "package_version": "1.0.0",
+        "deployment_config": {
+            "id": "8e16ba2e-cdf8-4d33-bddd-0404c2696390",
+            "enabled": true,
+            "channel_config": {},
+            "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
+            "deployment_config": null,
+            "last_deployment_date": "2022-03-14T14:21:20.538Z"
+        }
+    },
+    "package_code": "angie.demo",
+    "package_version": "1.0.0"
+}
