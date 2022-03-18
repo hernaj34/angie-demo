@@ -5,6 +5,7 @@
     "document_type": "method",
     "code": "hl7_encode",
     "data": {
+        "id": 105,
         "code": "hl7_encode",
         "name": "Convertir a texto",
         "type": {
@@ -16,7 +17,7 @@
             "type": "object",
             "objectCode": "angie.core.hl7_message"
         },
-        "sourceCode": "return self.encode();",
+        "sourceCode": "// Test\nreturn self.encode();",
         "description": "",
         "package_code": "angie.demo",
         "renderTemplate": "Convertir a texto",

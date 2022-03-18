@@ -21,7 +21,7 @@
                     "approved": true,
                     "joined_date": "2022-02-14T15:47:55.307Z",
                     "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "iM0mvqilxNRltjp5AAAD",
+                    "last_socket_id": "e5lxYgwKtC33n_cfAAAB",
                     "current_channels": {
                         "list": [
                             {
@@ -29,7 +29,7 @@
                                 "name": "his_to_sequencer",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "3s519ms",
+                                    "uptime": "4s716ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -40,7 +40,7 @@
                                 "name": "list_to_his",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "2s180ms",
+                                    "uptime": "1s930ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -48,7 +48,7 @@
                             }
                         ]
                     },
-                    "last_online_date": "2022-03-17T12:27:55.353Z"
+                    "last_online_date": "2022-03-18T09:14:02.992Z"
                 },
                 "nodes": [
                     {
@@ -619,7 +619,7 @@
                     "approved": true,
                     "joined_date": "2022-02-14T15:47:55.307Z",
                     "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "iM0mvqilxNRltjp5AAAD",
+                    "last_socket_id": "e5lxYgwKtC33n_cfAAAB",
                     "current_channels": {
                         "list": [
                             {
@@ -627,7 +627,7 @@
                                 "name": "his_to_sequencer",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "3s519ms",
+                                    "uptime": "4s716ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -638,7 +638,7 @@
                                 "name": "list_to_his",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "2s253ms",
+                                    "uptime": "2s15ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -646,7 +646,7 @@
                             }
                         ]
                     },
-                    "last_online_date": "2022-03-17T12:27:55.353Z"
+                    "last_online_date": "2022-03-18T09:14:02.992Z"
                 },
                 "nodes": [
                     {
@@ -952,7 +952,7 @@
         ],
         "created_on": "2022-02-28T16:09:51.266Z",
         "description": "Demo integration",
-        "last_updated": "2022-03-17T14:55:27.690Z",
+        "last_updated": "2022-03-18T09:14:25.506Z",
         "package_code": "angie.demo",
         "package_version": "1.0.0",
         "deployment_config": {
@@ -992,7 +992,7 @@
             },
             "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
             "deployment_config": null,
-            "last_deployment_date": "2022-03-17T14:55:27.691Z"
+            "last_deployment_date": "2022-03-18T09:14:25.507Z"
         }
     },
     "package_code": "angie.demo",
