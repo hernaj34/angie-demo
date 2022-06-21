@@ -8,48 +8,7 @@
             {
                 "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
                 "name": "his_to_sequencer",
-                "agent": {
-                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
-                    "meta": {
-                        "ip": "127.0.0.1",
-                        "platform": "Mac OS X",
-                        "rest_api_port": "6100"
-                    },
-                    "name": "JUM1",
-                    "status": "online",
-                    "options": null,
-                    "approved": true,
-                    "joined_date": "2022-02-14T15:47:55.307Z",
-                    "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "e5lxYgwKtC33n_cfAAAB",
-                    "current_channels": {
-                        "list": [
-                            {
-                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
-                                "name": "his_to_sequencer",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "4s716ms",
-                                    "messages_sent": 0,
-                                    "messages_error": 0,
-                                    "messages_total": 0
-                                }
-                            },
-                            {
-                                "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
-                                "name": "list_to_his",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "1s930ms",
-                                    "messages_sent": 0,
-                                    "messages_error": 0,
-                                    "messages_total": 0
-                                }
-                            }
-                        ]
-                    },
-                    "last_online_date": "2022-03-18T09:14:02.992Z"
-                },
+                "agent": null,
                 "nodes": [
                     {
                         "id": "8bafebc5-296c-49df-ac4c-7470bb1d88a0",
@@ -584,7 +543,7 @@
                         }
                     }
                 ],
-                "status": "Started",
+                "status": "UNDEPLOYED",
                 "enabled": true,
                 "version": 97,
                 "created_on": "2022-02-28T16:20:33.960Z",
@@ -619,15 +578,26 @@
                     "approved": true,
                     "joined_date": "2022-02-14T15:47:55.307Z",
                     "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "e5lxYgwKtC33n_cfAAAB",
+                    "last_socket_id": "CHeGbcpY0_lYWTsnAAAB",
                     "current_channels": {
                         "list": [
                             {
-                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
-                                "name": "his_to_sequencer",
+                                "id": "aaeb5a0c-6aff-44aa-a537-733a98fee287",
+                                "name": "http_status",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "4s716ms",
+                                    "uptime": "5s110ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            },
+                            {
+                                "id": "a0ebb003-cb06-4e10-9799-894435a30959",
+                                "name": "sequencer_to_lis",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "2s842ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -638,7 +608,7 @@
                                 "name": "list_to_his",
                                 "status": {
                                     "status": "Started",
-                                    "uptime": "2s15ms",
+                                    "uptime": "1s485ms",
                                     "messages_sent": 0,
                                     "messages_error": 0,
                                     "messages_total": 0
@@ -646,7 +616,7 @@
                             }
                         ]
                     },
-                    "last_online_date": "2022-03-18T09:14:02.992Z"
+                    "last_online_date": "2022-06-21T07:47:16.098Z"
                 },
                 "nodes": [
                     {
@@ -798,7 +768,59 @@
             {
                 "id": "a0ebb003-cb06-4e10-9799-894435a30959",
                 "name": "sequencer_to_lis",
-                "agent": null,
+                "agent": {
+                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
+                    "meta": {
+                        "ip": "127.0.0.1",
+                        "platform": "Mac OS X",
+                        "rest_api_port": "6100"
+                    },
+                    "name": "JUM1",
+                    "status": "online",
+                    "options": null,
+                    "approved": true,
+                    "joined_date": "2022-02-14T15:47:55.307Z",
+                    "approved_date": "2022-02-14T15:48:33.765Z",
+                    "last_socket_id": "CHeGbcpY0_lYWTsnAAAB",
+                    "current_channels": {
+                        "list": [
+                            {
+                                "id": "aaeb5a0c-6aff-44aa-a537-733a98fee287",
+                                "name": "http_status",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "5s110ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            },
+                            {
+                                "id": "a0ebb003-cb06-4e10-9799-894435a30959",
+                                "name": "sequencer_to_lis",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "2s973ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            },
+                            {
+                                "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
+                                "name": "list_to_his",
+                                "status": {
+                                    "status": "Started",
+                                    "uptime": "1s485ms",
+                                    "messages_sent": 0,
+                                    "messages_error": 0,
+                                    "messages_total": 0
+                                }
+                            }
+                        ]
+                    },
+                    "last_online_date": "2022-06-21T07:47:16.098Z"
+                },
                 "nodes": [
                     {
                         "id": "11363929-3df2-4ee1-b415-26231dfcf811",
@@ -927,7 +949,7 @@
                         }
                     }
                 ],
-                "status": "UNDEPLOYED",
+                "status": "Started",
                 "enabled": true,
                 "version": 34,
                 "created_on": "2022-03-17T14:40:09.778Z",
@@ -952,7 +974,7 @@
         ],
         "created_on": "2022-02-28T16:09:51.266Z",
         "description": "Demo integration",
-        "last_updated": "2022-03-18T09:14:25.506Z",
+        "last_updated": "2022-06-21T07:47:49.030Z",
         "package_code": "angie.demo",
         "package_version": "1.0.0",
         "deployment_config": {
@@ -992,7 +1014,7 @@
             },
             "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
             "deployment_config": null,
-            "last_deployment_date": "2022-03-18T09:14:25.507Z"
+            "last_deployment_date": "2022-06-21T07:47:49.032Z"
         }
     },
     "package_code": "angie.demo",

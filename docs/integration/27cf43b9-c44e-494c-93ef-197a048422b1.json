@@ -8,70 +8,7 @@
             {
                 "id": "aaeb5a0c-6aff-44aa-a537-733a98fee287",
                 "name": "http_status",
-                "agent": {
-                    "id": "e9cbba1d-88b1-461f-94a9-7f4e426ead3d",
-                    "meta": {
-                        "ip": "127.0.0.1",
-                        "platform": "Mac OS X",
-                        "rest_api_port": "6100"
-                    },
-                    "name": "JUM1",
-                    "status": "online",
-                    "options": null,
-                    "approved": true,
-                    "joined_date": "2022-02-14T15:47:55.307Z",
-                    "approved_date": "2022-02-14T15:48:33.765Z",
-                    "last_socket_id": "iM0mvqilxNRltjp5AAAD",
-                    "current_channels": {
-                        "list": [
-                            {
-                                "id": "0e72a0e1-ae5b-4074-a56e-b1ce4ae306cd",
-                                "name": "his_to_sequencer",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "13m44s",
-                                    "messages_sent": 0,
-                                    "messages_error": 0,
-                                    "messages_total": 0
-                                }
-                            },
-                            {
-                                "id": "4fdcaec6-a00c-485b-a076-32de7bef0bbc",
-                                "name": "list_to_his",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "13m43s",
-                                    "messages_sent": 1,
-                                    "messages_error": 2,
-                                    "messages_total": 3
-                                }
-                            },
-                            {
-                                "id": "a0ebb003-cb06-4e10-9799-894435a30959",
-                                "name": "sequencer_to_lis",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "13m41s",
-                                    "messages_sent": 3,
-                                    "messages_error": 0,
-                                    "messages_total": 3
-                                }
-                            },
-                            {
-                                "id": "aaeb5a0c-6aff-44aa-a537-733a98fee287",
-                                "name": "http_status",
-                                "status": {
-                                    "status": "Started",
-                                    "uptime": "13m29s",
-                                    "messages_sent": 29,
-                                    "messages_error": 0,
-                                    "messages_total": 29
-                                }
-                            }
-                        ]
-                    },
-                    "last_online_date": "2022-03-17T12:27:55.353Z"
-                },
+                "agent": null,
                 "nodes": [
                     {
                         "id": "f30e61a7-76cb-4e79-8af0-46481893623e",
@@ -227,14 +164,14 @@
                         }
                     }
                 ],
-                "status": "Started",
+                "status": "UNDEPLOYED",
                 "enabled": true,
                 "version": 19,
                 "created_on": "2022-03-01T09:27:19.663Z",
                 "last_updated": "2022-03-16T09:33:40.859Z",
-                "messages_sent": 14,
+                "messages_sent": 9,
                 "messages_error": 0,
-                "messages_total": 14,
+                "messages_total": 9,
                 "deployment_options": {
                     "trace_stats": true,
                     "assigned_agent": [],
@@ -245,12 +182,12 @@
                     "trace_incoming_message": true,
                     "trace_outgoing_message": true
                 },
-                "last_deployed_route": null
+                "last_deployed_route": "<routes xmlns=\"http://camel.apache.org/schema/spring\"><route id=\"f30e61a7-76cb-4e79-8af0-46481893623e\" group=\"\"><description>HTTP Input</description>\n    <from uri=\"jetty:http://0.0.0.0:8888/status?async%3Dfalse%26enableCORS%3Dfalse\"/>\n    \n            <to uri=\"direct:d53008f6-94bc-431e-9de1-d37890de3830\" />\n</route><route id=\"d53008f6-94bc-431e-9de1-d37890de3830\" group=\"\"><description>Visual Groovy Code</description>\n    <from uri=\"direct:d53008f6-94bc-431e-9de1-d37890de3830\"/>\n    <script>\n        <groovy>\n            <![CDATA[import com.github.mustachejava.DefaultMustacheFactory;\nimport com.github.mustachejava.Mustache;\nimport java.io.StringReader;\nimport java.io.StringWriter;\nimport java.io.Writer;\n\n// Code preparation\ndef context = [exchange: exchange, request: request, response: response, properties: properties, variables: [:]];\ndef nestedSet( variables, variablePath, Object value){\n    def index = 0\n    def currentVariable = variables\n    for (member in variablePath){\n        if (index == variablePath.size() - 1) {\n            currentVariable[member] = value\n        }else{\n            if (!currentVariable.containsKey(member)){\n                currentVariable[member] = [:]\n            }\n            currentVariable = currentVariable[member]\n        }\n        index++\n    }\n}\n\ndef resolveTemplate(String template, Object context){\n    Writer writer = new StringWriter();\n    DefaultMustacheFactory mf = new DefaultMustacheFactory();\n    mf.compile(new StringReader(template),\"test\",\"#{\",\"}\").execute(writer,context);\n    return writer.toString();\n}\n\n// Functions\n\ndef exchangeSetBody(self, options) {\n    context = options.context;\n    params = options.params;\n    variablePath = options.variablePath;\n    self.getIn().setBody(params.body);\n}\n\n// Start\n\n// Nuevo grupo de expresiones\nexchangeSetBody(context?.exchange, [ params: [\"body\": \"{\\\"message\\\": \\\"Running properly\\\"}\"], context: context]);\n\n// End]]>\n        </groovy>\n    </script>\n    <to uri=\"direct:0cec652c-6b90-40b6-a535-3f6190d6a47b\" />\n</route><route id=\"0cec652c-6b90-40b6-a535-3f6190d6a47b\" group=\"\"><description>Fin Flujo</description>\n    <from uri=\"direct:0cec652c-6b90-40b6-a535-3f6190d6a47b\"/>\n    <to uri=\"stub:end0cec652c-6b90-40b6-a535-3f6190d6a47b?discardIfNoConsumers=true\"/>\n</route></routes>"
             }
         ],
         "created_on": "2022-03-01T09:26:51.012Z",
         "description": "Demo for providing status",
-        "last_updated": "2022-03-17T15:09:08.985Z",
+        "last_updated": "2022-06-21T07:47:37.937Z",
         "package_code": "angie.demo",
         "package_version": "1.0.0",
         "deployment_config": {
@@ -270,7 +207,7 @@
             },
             "organization_id": "994e852b-80d0-4382-8f6f-3a60036633ce",
             "deployment_config": null,
-            "last_deployment_date": "2022-03-17T15:09:08.986Z"
+            "last_deployment_date": "2022-06-21T07:47:37.938Z"
         }
     },
     "package_code": "angie.demo",
